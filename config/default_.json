@@ -1,0 +1,72 @@
+{
+	"database":
+	{
+	  "user": "",
+	  "host": "",
+	  "database": "",
+	  "password": "",
+	  "port": 5432
+	},
+	"user": {
+		"username": "",
+		"password": "",
+		"token": ""
+	},
+	"app_list":{
+		"sat2": {
+			"dir": "sat2",
+			"script": "rest.js",
+			"webdir": "/sat2/seriescontrol",
+			"testpath": "/",
+			"logfile": "logs/sat2.log",
+			"port": "3002"
+		},
+		"informe_complementario": {
+			"dir": "informe_complementario",
+			"script": "index.js",
+			"webdir": "/informes/login",
+			"testpath": "/login",
+			"logfile": "logs/informe_complementario.log",
+			"port": "3000"
+		},
+		"alerta5DBIO": {
+			"dir": "alerta5DBIO",
+			"script": "rest.js",
+			"webdir": "/a5/secciones",
+			"testpath": "/",
+			"logfile": "logs/a5.log",
+			"port": "3005"
+		},
+		"wmlclient_wc": {
+			"dir": "wmlclient_wc",
+			"script": "rest.js",
+			"webdir": "/wmlclient/wml",
+			"testpath": "/",
+			"logfile": "logs/wmlclient_wc.log",
+			"port": "3003"
+		},
+		"heatmap": {
+			"dir": "heatmap",
+			"script": "index.js",
+			"webdir": "/seriescontrol",
+			"testpath": "/",
+			"logfile": "logs/heatmap.log",
+			"port": "4001"
+		},
+		"appController": {
+			"dir": "appController",
+			"script": "rest.js",
+			"webdir": "/controller",
+			"testpath": "/login",
+			"logfile": "logs/appController.log",
+			"port": "3006",
+			"controller":true
+		}
+	},
+	"rest":{
+		"port":3006,
+		"skip_authentication": false
+	},
+	"app_base_dir": "../"
+}
+

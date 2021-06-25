@@ -1,0 +1,107 @@
+<div class="d-flex flex-row justify-content-between">
+    <h3>App status list</h3>
+    <button id=refresh title="refresh"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+</div>
+<table id=apps_table class=table>
+    <thead>
+        <tr>
+            <th scope="col">name</th>
+            <th scope="col">port</th>
+            <th scope="col">localpath</th>
+            <th scope="col">remotepath</th>
+            <th scope="col">status</th>
+            <th scope="col">actions</th>
+        </tr>
+    </thead>
+    {{!-- <tbody>
+    {{#each app_status}}
+        <tr>
+            <th scope="row">{{this.app_name}}</th>
+            <td>{{app_list.[this.app_name].port}}</td>
+            <td>{{app_list.[this.app_name].webdir}}</td>
+            {{#if this.status}}
+                {{#if this.message}}
+                    <td>ACTIVE</td>
+                    <td>
+                        <a href="restart/{{this.app_name}}?redirect=/apps">restart</a>
+                        <a href="stop/{{this.app_name}}?redirect=/apps">stop</a>
+                        <a href="hard_restart/{{this.app_name}}?redirect=/apps">hard_restart</a>
+                        <a href="hard_stop/{{this.app_name}}?redirect=/apps">hard_stop</a>
+                    </td>
+                {{else}}
+                    <td>INACTIVE</td>
+                    <td>
+                        <a href="start/{{this.app_name}}?redirect=/apps">start</a>
+                    </td>
+                {{/if}}
+            {{else}}
+                <td>{{this.message}}</td>
+                <td></td>
+            {{/if}}
+        </tr>
+    {{/each}} 
+    </tbody> --}}
+    <tr class=all_apps>
+        <th scope="row">ALL</td>
+        <td colspan=5>
+            <a class=app-action href="start?redirect=/apps">start</a>
+            <a class=app-action href="restart?redirect=/apps">restart</a>
+            <a class=app-action href="stop?redirect=/apps">stop</a>
+            <a class=app-action href="hard_restart?redirect=/apps">hard_restart</a>
+            <a class=app-action href="hard_stop?redirect=/apps">hard_stop</a>
+        </td>
+    </tr>
+</table>
+<script>
+    $(document).ready(function() {
+        $.ajaxSetup({ cache: false });
+        $("button#refresh").click()    
+        var intervalId = window.setInterval(()=>{
+            $("button#refresh").click()
+        },5000)
+        // clearInterval(intervalId)
+    });
+    $("button#refresh").click(()=>{
+        // location.reload()
+        return $.getJSON("check",(data)=>{
+            reloadAppTable(data)
+        })
+    })
+    function reloadAppTable(data) {
+        var rows = data.map(app=>{
+            var row =  '<tr class=app>\
+                <th scope="row">' + app.app_name + '</th>\
+                <td>' + app.port + '</td>\
+                <td>http://localhost:' + app.port + app.testpath + '</td>\
+                <td><a target=_blank href="' + window.location.protocol + "//" + window.location.host + app.webdir + '">' + app.webdir + '</a></td>'
+            if (app.status) {
+                if(app.message) {
+                    row += '<td>ACTIVE</td>\
+                    <td>\
+                        <a class=app-action href="restart/' + app.app_name + '?redirect=/apps">restart</a>\
+                        <a class=app-action href="stop/' + app.app_name + '?redirect=/apps">stop</a>\
+                        <a class=app-action href="hard_restart/' + app.app_name + '?redirect=/apps">hard_restart</a>\
+                        <a class=app-action href="hard_stop/' + app.app_name + '?redirect=/apps">hard_stop</a>\
+                    </td>'
+                } else {
+                    row += '<td>INACTIVE</td>\
+                    <td>\
+                        <a class=app-action href="start/' + app.app_name + '?redirect=/apps">start</a>\
+                    </td>'
+                }
+            } else {
+                row +='<td>' + app.message + '</td>\
+                <td></td>'
+            }
+            row += '</tr>'
+            return row
+        })
+        // console.log("rows:"+rows.length)
+        $("table#apps_table tbody tr.app").remove()
+        $("table#apps_table tbody").prepend(rows.join("\n"))
+        return
+    }
+    // $("a.app-action").click(evt=>{
+       // $('body').css('cursor', 'progress');
+    // })
+</script>
